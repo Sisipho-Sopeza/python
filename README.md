@@ -356,3 +356,631 @@ Custom JSON Decoders
 However, there are exceptions, such as when dealing with custom Python classes like the Animal class. Attempting to dump a dictionary containing instances of this class will result in a TypeError since the JSON module doesn't know how to handle it.
 To address this, we can create a custom JSON encoder by extending the JSONEncoder class and overriding its `default()` method. This method determines how objects are encoded into JSON. By providing a custom encoder, we can specify how instances of the Animal class should be handled during JSON serialization.
 
+
+# WEEK 3
+# Project Planning
+# Finding Inspiration for Python Projects
+
+When starting a new programming project for fun or practice, the first question to tackle is: What should the program do? This open-ended question can be challenging, similar to an aspiring author facing a blank page. To overcome this, let's explore various sources of inspiration for your next Python project.
+
+**Hobbies as Inspiration**
+
+Consider your hobbies outside of coding. For instance, if you love attending concerts, you could create a Python script to track your favorite bands' upcoming performances and help you buy tickets. If you're passionate about photography and accumulate thousands of images each month, a Python script could organize your photo collection just the way you want.
+
+**Workplace Automation**
+
+Your job can also inspire ideas. Are there tasks that could benefit from automation? For example, if you and your colleagues spend hours manually transferring data between spreadsheets or generating reports, a Python script could automate these tedious processes, making you the office hero.
+
+**Daily Routine Improvements**
+
+Reflect on your daily routine at home. Are there tasks you could streamline with automation? For example, every morning, I check the weather, read the news, and browse various apps and websites. To make this routine more efficient, I thought of developing an application that sends me a daily email digest with all the information I need in one place. This idea will guide us throughout this course.
+
+**Brainstorming Project Ideas**
+
+Before diving deeper into any project, take a moment to brainstorm at least three project ideas inspired by your life. Write them down or type them out, and keep adding new ideas as they come to you. This way, you'll always have exciting project ideas ready to explore.
+
+# Use Cases
+Use cases are a helpful planning tool for applications, similar to user stories but with a different focus. A use case typically includes:
+
+1. **Title**
+2. **Actor** (a user or system)
+3. **Scenario** (describes how a goal is achieved, either as a paragraph or a list of steps in simple language)
+
+For example, a use case might describe a digest recipient reading tweets on a specific Twitter trend by opening an email, clicking on the trend link, and accessing the corresponding Twitter page.
+
+**Comparison with User Stories**
+
+- **User Stories** focus on the who, what, and why of a task or goal.
+- **Use Cases** cover the who, what, and how of achieving that goal.
+
+They complement each other and can be used together or separately depending on your project's complexity and your personal working style.
+
+# Project Requirements
+
+In addition to user stories and use cases, writing traditional requirements helps formally capture an application's capabilities and limitations. 
+
+**Functional Requirements**
+
+These describe what the application should or should not do, starting with "the application must" or "the application shall." For example:
+
+- The daily digest application must generate a random inspirational quote and retrieve current weather forecasts, Twitter trends, and a random Wikipedia article.
+- It should format this content into an email and send it to a specified recipient list.
+
+These requirements act as a checklist to ensure all necessary functionalities are met. They are kept high-level, omitting specific details like forecast duration or temperature units. Additional requirements might include configuring content sources, adding and removing recipients, scheduling the email digest, and setting email account credentials.
+
+**Non-Functional Requirements**
+
+These describe how the application should accomplish its tasks, focusing on qualities like maintainability, reliability, and usability. For example:
+
+- The application should have a configurable GUI for the admin.
+- It should be extensible for adding more content types.
+- It should be resilient to content errors.
+
+With these requirements, you can start the first iteration of the application. This is a good time to pause and write your own set of functional and non-functional requirements for your project.
+
+# Architecture
+
+With the requirements captured, it's time to organize and structure the code. Python, being an object-oriented programming language, benefits from using objects and classes. By identifying nouns in the requirements, use cases, and user stories, potential objects become clear. For instance, words like quote, forecast, location, trends, article, content, email, and recipients suggest potential objects.
+
+**Grouping Nouns into Classes**
+
+Related nouns can be grouped into potential classes, such as:
+
+- **Content**
+- **Email**
+- **GUI**
+
+**Assigning Behaviors to Classes**
+
+Behaviors and responsibilities are derived from simplified verb phrases in the requirements, such as:
+
+- Generating quotes
+- Retrieving forecasts
+- Formatting content
+- Sending emails
+
+These behaviors are assigned to the corresponding classes:
+
+- **Content Class**: Generates and retrieves content.
+- **Email Class**: Formats content and sends emails.
+- **GUI Class**: Manages configuration-related behaviors.
+
+**Drafting Methods and Attributes**
+
+Attributes and method names are determined, like storing the list of digest recipients in the email class and setting the send time property. While a detailed plan is crucial for team projects, a rough plan with three classes is enough to start coding for solo developers and smaller projects. The plan will evolve with implementation, and changes are expected.
+
+**Adapting the Plan**
+
+The final product may differ from the initial plan as new insights and learning opportunities arise throughout the development process.
+
+
+# Stub Code
+
+To start coding, a structure has been set up using three Python modules: `dd_content.py`, `dd_email.py`, and `dd_gui.py`. 
+
+**dd_email.py:**
+- Contains the skeleton for the daily digest email class.
+- Placeholder methods use the `pass` statement, allowing the script to run without errors despite lacking functionality.
+- Includes an `if __name__ == "__main__":` section for testing the email class.
+
+**dd_content.py:**
+- Includes an `if __name__ == "__main__":` section for test code.
+- Instead of a daily digest content class, it has independent functions for retrieving random quotes, weather forecasts, Twitter trends, and Wikipedia articles. This design choice makes it easy to add more content sources later.
+
+**dd_gui.py:**
+- Manages the graphical user interface (GUI) for the email digest administrator using the Tkinter module.
+- Import statements for Tkinter are included.
+- The `if __name__ == "__main__":` section contains standard code to build and run the GUI when executed as the main script.
+- Comments describe the desired functionality of the GUI for future development.
+
+This stub code provides a structure for the implementation, allowing for the separate development of the email class, content functions, and GUI.
+
+
+# Content Retrieval 
+# Daily Inspirational Quotes
+
+With the program structure outlined, it's time to implement the code. In the upcoming section, we'll add four functions to the "dd_content.py" module. Let's start by creating a "get_random_quote" function. Your implementation may vary, as the requirements allow flexibility.
+
+**Steps for Implementing "get_random_quote":**
+
+1. **Determine the Source of Quotes:** Instead of using web scraping libraries like Beautiful Soup or Scrapy, we'll curate a personal list of inspirational quotes.
+2. **Store Quotes:** Quotes and their authors will be stored in a CSV file for simplicity. Each line in the file will have the author and quote separated by a vertical pipe symbol.
+
+**Implementing the "get_random_quote" Function:**
+
+1. **Location:** The function is added to the "dd_content.py" file, starting at line seven.
+2. **Parameters:** It takes a named parameter for the quotes file location, defaulting to "quotes.csv".
+3. **Error Handling:** The file loading code is wrapped in a try-except block to handle exceptions.
+4. **Reading the File:** The CSV file is opened, and a list of dictionaries is created using list comprehension, with each dictionary representing an author and their quote. The CSV reader uses the vertical pipe symbol as the delimiter.
+5. **Default Quote:** In the except block, a default quote is defined in case the file fails to load.
+6. **Random Selection:** The random module's "choice" function selects a random quote from the list, which is returned as a dictionary object.
+
+**Testing the Function:**
+
+- In the main execution block, testing code demonstrates the quote generation functionality.
+- The "get_random_quote" function is called without an input argument, and the returned quote is printed.
+- Another test sets the quotes file argument to None, triggering the exception clause and returning the default quote.
+
+Running the script will display the generated quotes. The first quote is retrieved from the "quotes.csv" file, and the second is the default quote by Eric Idle.
+
+# Weather Forecasting with OpenWeatherMap
+
+Now that the "get_random_quote" function is complete, let's move on to the next content function, "get_weather_forecast," in the "dd_content.py" module. This function will fetch current weather data from the internet using the OpenWeatherMap API.
+
+**Steps to Implement "get_weather_forecast":**
+
+1. **Choosing a Data Source:**
+   - Instead of storing weather data locally, we'll fetch it from the internet using OpenWeatherMap's API.
+
+2. **API Setup:**
+   - Register with OpenWeatherMap to obtain a free API key.
+   - Use the 5-Day / 3-Hour Forecast API, which provides weather data in three-hour intervals.
+   - We’ll use geographic coordinates (latitude and longitude) to specify the location.
+
+3. **Implementation Details:**
+   - For simplicity, use a default location (near Cape Canaveral, Florida) for the forecast.
+   - Customize the forecast for other locations later if needed.
+
+**Implementing the "get_weather_forecast" Function:**
+
+1. **Imports:**
+   - Add the `request` module from `urllib`, the `json` module, and the `datetime` module at the beginning of the script.
+
+2. **Function Definition:**
+   - Start the "get_weather_forecast" function at line 25 with an optional `coords` parameter for latitude and longitude.
+
+3. **API Call:**
+   - Format the API URL using the API key and coordinates.
+   - Retrieve the JSON response from the API using the `request` module.
+
+4. **Processing Data:**
+   - Parse the JSON response into a Python dictionary.
+   - Create a simplified forecast dictionary containing only the necessary information (city, country, forecast periods).
+   - Use a loop to gather forecast data for the next 24 hours (first nine three-hour periods).
+
+5. **Error Handling:**
+   - Use a try-except block to handle potential errors during the API call and data processing.
+
+**Example Code Snippet:**
+
+```python
+import urllib.request as request
+import json
+import datetime
+
+def get_weather_forecast(coords=None):
+    if coords is None:
+        coords = {"lat": 28.3922, "lon": -80.6077}  # Default: Cape Canaveral, FL
+    try:
+        api_key = 'YOUR_API_KEY'  # Replace with your API key
+        url = f"http://api.openweathermap.org/data/2.5/forecast?lat={coords['lat']}&lon={coords['lon']}&appid={api_key}&units=metric"
+        response = request.urlopen(url)
+        data = json.load(response)
+        
+        forecast = {
+            "city": data["city"]["name"],
+            "country": data["city"]["country"],
+            "periods": []
+        }
+        
+        for period in data["list"][:9]:
+            forecast["periods"].append({
+                "timestamp": datetime.datetime.fromtimestamp(period["dt"]),
+                "temperature": period["main"]["temp"],
+                "description": period["weather"][0]["description"],
+                "icon": period["weather"][0]["icon"]
+            })
+        
+        return forecast
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+if __name__ == "__main__":
+    # Test cases
+    print(get_weather_forecast())
+    print(get_weather_forecast({"lat": 30.2672, "lon": -97.7431}))  # Austin, TX
+    print(get_weather_forecast({"lat": -9999, "lon": -9999}))  # Invalid coordinates
+```
+
+**Testing the Function:**
+
+- Run the script with `python dd_content.py`.
+- The output should display the weather forecast for the default location (Cape Canaveral), Austin, TX, and an error message for invalid coordinates.
+
+This setup will provide current weather forecasts by calling the OpenWeatherMap API and processing the data to extract relevant information.
+
+# Trending Social Media Content (Twitter)
+
+To fetch current Twitter trends for the DD content module, we used the Twitter API. Here’s a simplified guide on how this was done:
+
+1. **API Access:**
+   - Register a Twitter account, request API access, and obtain an API key from the "Getting access to the Twitter API" section on Twitter’s website.
+   - The authentication process can be complex, so we searched for a Python library to simplify this.
+
+2. **Finding a Library:**
+   - After searching PyPI, we found over 3,000 related projects but focused on finding a well-maintained library.
+   - Google searches and blog posts helped us find "Tweepy," a popular and regularly updated library suitable for our needs.
+
+3. **Using Tweepy:**
+   - Install Tweepy with `pip install tweepy`.
+   - Import Tweepy in your code and define a function `get_twitter_trends` with an optional WOEID parameter (Where On Earth Identifier).
+
+4. **Implementation:**
+   - Use a try block to handle potential errors.
+   - Authenticate using your Twitter API key and secret key.
+   - Use Tweepy’s `trends_place` method to retrieve current trends based on the WOEID.
+
+**Example Code Snippet:**
+
+```python
+import tweepy
+
+def get_twitter_trends(woeid=23424977):  # Default WOEID for the United States
+    try:
+        api_key = 'YOUR_API_KEY'
+        api_secret = 'YOUR_API_SECRET'
+        auth = tweepy.AppAuthHandler(api_key, api_secret)
+        api = tweepy.API(auth)
+
+        trends = api.trends_place(woeid)
+        return trends[0]['trends']
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+if __name__ == "__main__":
+    # Test cases
+    print(get_twitter_trends())  # Default: United States
+    print(get_twitter_trends(44418))  # London WOEID
+    print(get_twitter_trends(9999999))  # Invalid WOEID
+```
+
+**Testing the Function:**
+
+- **Default Trends:** Call the function without arguments to get trends for the United States.
+- **Specific Location:** Provide a WOEID for another location, like London.
+- **Error Handling:** Test with an invalid WOEID to ensure the function handles errors properly.
+
+Running the script displays trends for the United States, followed by trends for London, and an error message for the invalid WOEID. This setup effectively fetches and handles Twitter trends using the Tweepy library and the Twitter API.
+
+# Trending Social Media Content (Twitter)
+
+To fetch current Twitter trends for the DD content module, we used the Twitter API. Here’s a simplified guide on how this was done:
+
+1. **API Access:**
+   - Register a Twitter account, request API access, and obtain an API key from the "Getting access to the Twitter API" section on Twitter’s website.
+   - The authentication process can be complex, so we searched for a Python library to simplify this.
+
+2. **Finding a Library:**
+   - After searching PyPI, we found over 3,000 related projects but focused on finding a well-maintained library.
+   - Google searches and blog posts helped us find "Tweepy," a popular and regularly updated library suitable for our needs.
+
+3. **Using Tweepy:**
+   - Install Tweepy with `pip install tweepy`.
+   - Import Tweepy in your code and define a function `get_twitter_trends` with an optional WOEID parameter (Where On Earth Identifier).
+
+4. **Implementation:**
+   - Use a try block to handle potential errors.
+   - Authenticate using your Twitter API key and secret key.
+   - Use Tweepy’s `trends_place` method to retrieve current trends based on the WOEID.
+
+**Example Code Snippet:**
+
+```python
+import tweepy
+
+def get_twitter_trends(woeid=23424977):  # Default WOEID for the United States
+    try:
+        api_key = 'YOUR_API_KEY'
+        api_secret = 'YOUR_API_SECRET'
+        auth = tweepy.AppAuthHandler(api_key, api_secret)
+        api = tweepy.API(auth)
+
+        trends = api.trends_place(woeid)
+        return trends[0]['trends']
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+if __name__ == "__main__":
+    # Test cases
+    print(get_twitter_trends())  # Default: United States
+    print(get_twitter_trends(44418))  # London WOEID
+    print(get_twitter_trends(9999999))  # Invalid WOEID
+```
+
+**Testing the Function:**
+
+- **Default Trends:** Call the function without arguments to get trends for the United States.
+- **Specific Location:** Provide a WOEID for another location, like London.
+- **Error Handling:** Test with an invalid WOEID to ensure the function handles errors properly.
+
+Running the script displays trends for the United States, followed by trends for London, and an error message for the invalid WOEID. This setup effectively fetches and handles Twitter trends using the Tweepy library and the Twitter API.
+
+### Importing Articles
+
+To implement the function for fetching random Wikipedia articles, we used the Wikipedia REST API. Here’s a simplified guide:
+
+1. **Check Wikipedia API:**
+   - Search for the Wikipedia API documentation using Google.
+   - Find the Wikipedia REST API which allows access to their content.
+
+2. **Using the API:**
+   - The REST API provides options to get a random page title, full page HTML, or a summary.
+   - We select the summary option since we only need a brief extract for the digest email.
+
+3. **Fetching the Data:**
+   - Use the API to get a URL that returns a random article summary in JSON format.
+   - The JSON response includes fields such as the page title, summary, and URL.
+
+**Example Code Snippet:**
+
+```python
+import requests
+import json
+
+def get_wikipedia_article():
+    try:
+        url = 'https://en.wikipedia.org/api/rest_v1/page/random/summary'
+        response = requests.get(url)
+        data = response.json()
+
+        article = {
+            'title': data['title'],
+            'extract': data['extract'],
+            'url': data['content_urls']['desktop']['page']
+        }
+        return article
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
+
+if __name__ == "__main__":
+    article = get_wikipedia_article()
+    if article:
+        print(f"Title: {article['title']}")
+        print(f"URL: {article['url']}")
+        print(f"Summary: {article['extract']}")
+```
+
+**Testing the Function:**
+
+- Run the script to fetch a random Wikipedia article.
+- Print the article’s title, URL, and summary.
+
+**Expected Output:**
+
+Running the script will display a random Wikipedia article with its title, URL, and summary. Each execution fetches a different random article, demonstrating the API’s functionality.
+
+This function, along with previous implementations for quotes, weather, and Twitter trends, completes the initial requirements for content retrieval. These examples illustrate how to use various APIs to fetch and process web information.
+
+# Digest Email
+# Writing and Formatting Email Messages
+Now, let's delve into crafting and formatting email messages, a crucial aspect of the Daily Digest email module. Here's a simplified walkthrough:
+
+1. **Understanding Email Formatting:**
+   - Initially, we planned a method called `format_message` to structure content for emails. However, the specifics of email formatting were unclear.
+   - Through research, we found Python's `MIMEMultipart` class, allowing both plaintext and HTML formats within a single email message.
+
+2. **Implementation Overview:**
+   - The `format_message` method generates both plaintext and HTML versions of the email content.
+   - In the constructor method (`__init__`), we initialize a dictionary to store four types of content, each marked with a Boolean flag for inclusion. Content is fetched using functions from the DD content module.
+
+3. **Formatting Plaintext:**
+   - We format plaintext content by setting up a string (`text`) with a header containing the current date.
+   - Section headers and content are added based on inclusion flags. For instance, weather forecasts and Twitter trends are formatted using loops for clarity.
+
+4. **Generating HTML Content:**
+   - Similar to plaintext, HTML content is constructed using HTML strings (`HTML`).
+   - Content inclusion is determined by `if` statements. Each section, like the weather forecast or Twitter trends, has its own HTML formatting.
+
+5. **Final Steps and Testing:**
+   - Towards the end of `format_message`, an HTML footer is appended, and the plaintext and HTML messages are returned as a dictionary.
+   - Test code generates a message, prints plaintext and HTML content, and saves them as files for review.
+
+**Test Output:**
+- Running the script shows plaintext content followed by HTML code in the terminal.
+- A text file with plaintext content is created in the directory.
+- For full HTML content, opening the HTML file in a browser reveals the formatted email content, including stylized headers, organized forecast data, and clickable hyperlinks for Twitter trends.
+
+This process ensures emails are well-structured and visually appealing, enhancing user experience.
+
+# Sending an Email
+After getting the daily digest content formatted, the next step is to send it as an email. Here's how it works:
+
+1. **Email Management with Python's 'email' Library:**
+   - Python's standard package includes the 'email' library, particularly the 'email.message' module, which helps manage email messages. The central component is the "Email Message" class, used to assemble various parts of the daily digest email like the subject line, recipient list, and message content.
+
+2. **Connecting to an SMTP Server:**
+   - SMTP-Lib, another Python module, enables creating a client session to send emails through an SMTP server. However, setting up and running your own email server locally is cumbersome. Instead, you can use online email services like Outlook, which provide an SMTP server that you can connect to.
+
+3. **Configuring Outlook SMTP Settings:**
+   - Microsoft's support page provides server name, port, and encryption method details for connecting to the Outlook SMTP server, ensuring secure email transmission.
+
+4. **Implementation Overview:**
+   - The `send_email` function begins by importing the necessary modules: SMTP-Lib and the `email.message` class.
+   - In the `__init__` method, additional instance variables are initialized, including a list of recipient email addresses for testing and a dictionary to store the sender's email address and account password.
+   - Next, the function creates a new email message object, setting fields such as the subject line, sender and recipient email addresses.
+   - The message body is generated using the `format_message` method, and plain text content is configured using the `set_content` method.
+   - To include the HTML version of the content, the `add_alternative` method is used, making the message a multi-part container with both plain text and HTML parts.
+   - Finally, the function establishes a secure connection to the SMTP server using TLS encryption, logs in with the sender's credentials, and sends the email message object using the `send_message` method.
+
+5. **Testing the Code:**
+   - A call to the `send_email` method is added at the end of the script. Running the script sends the email.
+   - Checking the inbox of one of the recipients reveals a new message with the subject "daily digest" and today's date. Opening the email displays the HTML formatted content, including the quote of the day, weather forecast, Twitter trends, and a Wikipedia summary.
+   - By including both plain text and HTML versions, the daily digest email becomes compatible with a wider range of email clients and settings.
+
+This process ensures smooth transmission of the daily digest email, ensuring recipients receive the information in a clear and accessible format.
+
+# Task Scheduling
+
+After successfully implementing the format message and send email methods for the daily digest email class, the final task is to schedule the email to be sent at a specific time every day.
+
+1. **Choosing a Scheduling Library:**
+   - Initially, the plan was to use the "schedule" library from the Python package index. However, it was discovered that this library lacks the ability to operate in the background, which would cause the main thread to become unresponsive.
+
+2. **Workaround with Threading:**
+   - To address this limitation, a workaround was found in the documentation, suggesting the use of Python's threading module to run the scheduler as a separate thread from the main program.
+
+3. **Implementation Overview:**
+   - A new class named `Scheduler` was created to handle the scheduling of daily digest emails.
+   - This class inherits from Python's threading module's `Thread` class, allowing it to run independently from the main thread.
+   - The constructor method initializes a threading event object to indicate when to stop running the thread.
+   - The `schedule_daily` method schedules the email sending task using the schedule API, ensuring it runs every day at the specified time.
+   - The `run` method continuously executes pending tasks until the stop flag is set.
+   - A `stop` method is provided to set the stop flag and halt the execution of the scheduler.
+
+4. **Test Code:**
+   - In the test code, a daily digest email object is instantiated, and a scheduler object is created to start running as a separate thread.
+   - A test email is scheduled to be sent one minute into the future, and the program remains active until the scheduled time.
+   - After the email is sent, the scheduler is stopped to halt the execution.
+
+5. **Outcome:**
+   - Running the scheduler script schedules a test email to be sent at the specified time. Upon checking the email client, a new daily digest is received as expected.
+
+By running the scheduler as a separate thread, the main program remains responsive, ensuring smooth execution of tasks without freezing the user interface. This implementation effectively schedules and sends the daily digest email at the specified time every day.
+
+# Building a Graphical User Interface (GUI)
+# GUI Design Planning
+1. **Keep It Simple:**
+   - GUI development is usually left until the end of a project to ensure that the underlying functionality is built first. Simple methods like sketching ideas on paper or using basic tools like PowerPoint slides can help in planning the GUI layout.
+
+2. **Identify Admin Needs:**
+   - Refer back to the requirements list to determine what functionalities the admin needs in the GUI. These may include content customization, recipient management, scheduling options, and configuration of sender credentials.
+
+3. **Break It Down:**
+   - Break down the GUI design into smaller parts to make the process more manageable. Envision each task as a separate section and arrange the elements within them.
+
+4. **Design Each Subsection:**
+   - Design each subsection of the GUI separately. For example:
+     - **Content Configuration:** Use check buttons for binary choices like selecting content sources.
+     - **Recipient Management:** Utilize a list box for managing recipients, with buttons to add and remove selected recipients.
+     - **Scheduling Options:** Use spin boxes to select the hour and minute for scheduling the email digest.
+     - **Sender Credentials:** Provide text entry fields for entering the email account and password.
+
+5. **Consider Safety Measures:**
+   - To prevent accidental changes triggering unwanted actions, include an "Update Settings" button. This button will allow the admin to deliberately lock in the new configuration settings, ensuring that unintended actions are prevented.
+
+By breaking down the GUI design into smaller subsections and carefully planning each component, it becomes easier to visualize the layout and ensure that the GUI meets the admin's needs effectively.
+
+# Exploring Python Tkinter GUI
+
+The GUI module, named "dd GUI," is around 250 lines long. Let's focus on the key design decisions made in its implementation. You can find the complete code in the exercise files for a more detailed exploration.
+
+1. **Module Imports:**
+   - Besides importing Python's Tkinter module, the daily digest email and scheduler modules are also imported since the GUI interacts with instances of both.
+
+2. **Initialization Method:**
+   - The initialization method of the daily digest class initializes the TKinter window where the GUI is built. It adds a title and a header label to the window and defines font styles to be used.
+
+3. **Building GUI Sections:**
+   - Different parts of the GUI, like adding and removing recipients, scheduling delivery time, configuring email content, updating sender credentials, and controlling settings updates, are built using TKinter frames and widgets.
+   - Variables are instantiated within the initialization method to easily initialize their values in one place, allowing for easy modification.
+   - Functions for creating and placing GUI widgets are organized into two sections: creating widgets and positioning them within the frame using TKinter's grid geometry manager.
+
+4. **Callback Methods:**
+   - Four callback methods are associated with buttons in the GUI, such as adding recipients, removing selected recipients, updating settings, and manually sending an email digest.
+   - These methods handle user interactions and update the GUI accordingly.
+
+5. **Shutdown Method:**
+   - The "shutdown" method stops the scheduler thread before closing the GUI window, ensuring proper termination of the application.
+
+6. **Main Section:**
+   - The "if __name__ == '__main__'" section spawns the GUI as the top-level script when the module is run. It creates the GUI window with controls for various functionalities like adding/removing recipients, scheduling send time, selecting content, updating settings, and triggering manual email sends.
+
+This Python Tkinter GUI provides all the necessary controls for the project, allowing the admin to customize and manage the daily digest application efficiently. For more in-depth learning about building GUIs with Python's Tkinter module, consider exploring courses on Python GUI development with Tkinter.
+
+# Design Iteration
+# Iterative Enhancements
+
+Great job on completing the initial scope of the daily digest project! Let's break down the tasks to consider for further enhancing the application based on your ideas and priorities:
+
+1. **Save Configuration Settings:**
+   - Modify the program to store configuration settings in a file or database. This ensures that changes made by the admin are retained across program restarts.
+
+2. **Customizable Content for Recipients:**
+   - Allow recipients to customize the content they want to receive in their digest. Create a settings section for recipients to select preferred content categories or topics.
+
+3. **Personalized Weather Forecast:**
+   - Enhance the weather forecast by customizing it for each recipient's location. Include a field in the recipient's information to store their location and fetch location-specific forecasts using a weather API.
+
+4. **Timezone-based Email Sending:**
+   - Adjust the sending time of the email digest based on each recipient's timezone. Ensure that all recipients receive the digest at a time relative to their day.
+
+5. **Notification of Unavailable Content Sources:**
+   - Implement a mechanism to notify the admin when a content source becomes unavailable. Periodically check content source availability and send notifications or generate error logs when issues arise.
+
+6. **Persistent Application as a Scheduled Service:**
+   - Modify the application to run as a scheduled service instead of requiring continuous Python interpreter running. Use OS-specific mechanisms like cron jobs to schedule program execution at the desired time.
+
+7. **Secure Storage of Sensitive Information:**
+   - Enhance security by finding a more secure way to store sensitive information like sender credentials and API keys. Consider encryption or storing credentials in a separate, restricted-access configuration file.
+
+8. **GUI Improvements:**
+   - Enhance the visual appeal and usability of the GUI. Refine layout, add icons, use color schemes, and incorporate user-friendly features like tooltips or keyboard shortcuts.
+
+# Preserving Configuration Settings
+Here's a simplified version of the process for preserving configuration settings:
+To save and restore configuration settings between program runs, JSON file format is used. In the GUI module, two new methods were added to the GUI class: save_config() and load_config().
+In save_config(), the current state of GUI elements is collected into a configuration dictionary and saved to a file using JSON.dump().
+In load_config(), the JSON file is loaded into a dictionary, and GUI variables are set accordingly. Then, the update_settings() method is called to apply the configuration.
+To integrate these methods into the program's flow, two calls are made:
+1. In the shutdown method, a try-except block is added to save the current configuration when closing the program.
+2. In the init method, a try clause is added to load the configuration from the JSON file. If loading fails, default settings are used.
+Implementing this new feature takes about half an hour but significantly improves the usability of the digest project. Enjoy tackling the next idea on your to-do list!
+
+#  Project Packaging and Distribution 
+# Distributing Python Projects
+To distribute your Python project as an executable, you can use a tool called PyInstaller. First, install PyInstaller by running "pip install pyinstaller" in your terminal.
+Once installed, navigate to your project directory and run the command "pyinstaller -w -F dd_gui.py". Here, "-w" hides the console window, and "-F" bundles everything into a single executable file.
+After running PyInstaller, you'll find the generated EXE file in a "dist" folder. You can share this executable with others who want to use your app, like your mom. They can simply double-click the EXE file to launch the program and access the GUI.
+Remember, PyInstaller offers more features than covered here. Check the documentation for further details on distributing Python apps as executables.
+
+# Week 4
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
